@@ -2,6 +2,8 @@ import os
 import requests
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv
+import threading
+import bot
 
 load_dotenv()
 
@@ -29,5 +31,12 @@ def webhook():
 
     return jsonify({"status": "success"})
 
+
+def run_flask():
+    app.run(host='0.0.0.0', port=500)
+
 if __name__ == '__main__':
-    app.run(port=5000)
+    bot_thread = threading.Thread(target=bot.run_bot)
+    bot_thread.start()
+
+    run_flask()
